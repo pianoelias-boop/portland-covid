@@ -1,0 +1,14 @@
+{
+  "name": "Portland COVID Estimate",
+  "short_name": "COVID Now",
+  "description": "Estimates how many people in Portland, ME are currently infectious with COVID, from the latest WastewaterSCAN reading.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f5f2",
+  "theme_color": "#27433f",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

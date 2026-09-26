@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Estimates how many people in Portland, ME are currently infectious with COVID, from the latest WastewaterSCAN reading.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="COVID Now">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131716" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Portland COVID Estimate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --link: #2f6690;
+    --hero: #27433f;
+    --figure: #2f7d6b;
+    --muted: #6b6b6b;
+    --line: #e3e1dc;
+    --page: #f6f5f2;
+    --card: #ffffff;
+    --inset: #fafaf8;
+    --well: #f3f5f7;
+    --chip-bg: #eceae5;
+    --warn-ink: #8a4b12;
+    --warn-bg: #f7ead9;
+    --spark: #2f7d6b;
+    --spark-fill: rgba(47, 125, 107, 0.12);
+    --shadow: 0 1px 0 #fff inset, 0 18px 40px -28px rgba(40, 30, 20, .5);
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ink: #ecebe6;
+      --link: #8cb9dd;
+      --hero: #a6d8cc;
+      --figure: #74c4ab;
+      --muted: #9ba39f;
+      --line: #2e3533;
+      --page: #131716;
+      --card: #1b201e;
+      --inset: #202624;
+      --well: #1e2427;
+      --chip-bg: #262c2a;
+      --warn-ink: #f0b77c;
+      --warn-bg: #3a2a1a;
+      --spark: #74c4ab;
+      --spark-fill: rgba(116, 196, 171, 0.14);
+      --shadow: 0 18px 40px -28px rgba(0, 0, 0, .8);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ink: #ecebe6;
+    --link: #8cb9dd;
+    --hero: #a6d8cc;
+    --figure: #74c4ab;
+    --muted: #9ba39f;
+    --line: #2e3533;
+    --page: #131716;
+    --card: #1b201e;
+    --inset: #202624;
+    --well: #1e2427;
+    --chip-bg: #262c2a;
+    --warn-ink: #f0b77c;
+    --warn-bg: #3a2a1a;
+    --spark: #74c4ab;
+    --spark-fill: rgba(116, 196, 171, 0.14);
+    --shadow: 0 18px 40px -28px rgba(0, 0, 0, .8);
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--serif);
+  }
+  .wrap { padding: 32px 16px 40px; }
+  .inner { max-width: 620px; margin: 0 auto; }
+
+  h1 {
+    font-weight: 900;
+    font-size: clamp(28px, 6vw, 44px);
+    line-height: 1.02;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .sub { font-size: 15px; color: var(--muted); margin: 0 0 14px; max-width: 470px; line-height: 1.45; }
+  a { color: var(--link); }
+  .dash-link {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    text-underline-offset: 3px;
+    display: inline-block;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 28px 0 12px;
+    padding-top: 18px;
+    border-top: 2px solid var(--line);
+  }
+  .section-title.first { margin-top: 0; padding-top: 0; border-top: none; }
+
+  .reading-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    padding: 3px 10px;
+    background: var(--chip-bg);
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .chip.live { color: var(--figure); }
+  .chip.warn { color: var(--warn-ink); background: var(--warn-bg); border-color: transparent; }
+
+  #ww {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--mono);
+    font-size: 30px;
+    font-weight: 600;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 2px solid var(--line);
+    background: var(--inset);
+    color: var(--ink);
+    outline: none;
+    font-variant-numeric: tabular-nums;
+  }
+  input:focus-visible { border-color: var(--link) !important; }
+  .input-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+  .text-btn {
+    font: inherit;
+    color: var(--link);
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .text-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 3px; }
+
+  .spark { margin-top: 16px; }
+  .spark svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .spark text { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); }
+  .spark .end-label { fill: var(--figure); font-weight: 600; }
+  .spark-caption { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .big-result {
+    margin-top: 22px;
+    padding: 24px 20px;
+    border-radius: 14px;
+    background: var(--well);
+    border: 1px solid var(--line);
+    text-align: center;
+  }
+  .big-num {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: clamp(36px, 10vw, 60px);
+    color: var(--hero);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .big-label { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .pct-chip {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--chip-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 440px) { .two-col { grid-template-columns: 1fr; } }
+  .mini {
+    background: var(--inset);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .mini + .mini { margin-top: 12px; }
+  .two-col .mini + .mini { margin-top: 0; }
+  .mini-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .mini-val { font-family: var(--mono); font-size: 24px; font-weight: 600; color: var(--figure); font-variant-numeric: tabular-nums; }
+  .mini-sub { font-family: var(--mono); font-size: 11.5px; line-height: 1.4; color: var(--muted); margin-top: 5px; }
+  #room {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    padding: 6px 9px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 9px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    outline: none;
+  }
+
+  .note { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-top: 22px; font-style: italic; max-width: 65ch; }
+  .sources { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .sources-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .source-link {
+    display: block;
+    font-size: 13px;
+    text-decoration: none;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    border-bottom: 1px dotted var(--line);
+    padding-bottom: 10px;
+  }
+  ::selection { background: var(--hero); color: var(--card); }
+</style>
+
+</head>
+<body>
+<script id="ww-data" type="application/json">{"latest":{"date":"2026-09-21","trend":42.24,"sample":35.59,"level":"very low"},"history":[["2026-03-25",177.34],["2026-03-27",176.4],["2026-03-30",162.91],["2026-04-01",162.91],["2026-04-03",148.95],["2026-04-06",148.95],["2026-04-08",121.67],["2026-04-09",81.08],["2026-04-13",58.25],["2026-04-30",24.2],["2026-05-01",19.37],["2026-05-04",19.37],["2026-05-06",23.59],["2026-05-08",18.65],["2026-05-11",21.19],["2026-05-13",18.46],["2026-05-15",14.14],["2026-05-18",8.49],["2026-05-20",11.02],["2026-05-22",15.21],["2026-05-26",36.61],["2026-05-28",31.24],["2026-05-30",31.24],["2026-06-01",21.4],["2026-06-03",0.0],["2026-06-05",0.0],["2026-06-08",0.0],["2026-06-10",0.0],["2026-06-12",0.0],["2026-06-15",0.0],["2026-06-17",0.0],["2026-06-22",0.0],["2026-06-24",0.0],["2026-06-26",8.8],["2026-07-01",8.8],["2026-07-05",15.77],["2026-07-08",11.14],["2026-07-10",24.46],["2026-07-13",19.87],["2026-07-15",19.87],["2026-07-17",12.9],["2026-07-20",8.73],["2026-07-22",0.0],["2026-07-24",0.0],["2026-07-27",4.66],["2026-07-29",8.02],["2026-07-31",14.14],["2026-08-03",17.17],["2026-08-06",14.54],["2026-08-07",20.98],["2026-08-10",23.63],["2026-08-12",32.96],["2026-08-14",30.29],["2026-08-17",30.29],["2026-08-19",24.79],["2026-08-21",25.15],["2026-08-24",23.72],["2026-08-26",25.27],["2026-08-28",28.99],["2026-08-31",25.27],["2026-09-02",33.49],["2026-09-04",31.46],["2026-09-09",38.78],["2026-09-10",35.56],["2026-09-11",49.61],["2026-09-16",46.75],["2026-09-18",52.32],["2026-09-21",42.24]],"sourceUpdated":"2026-09-26T03:28:37.147587","fetchedAt":"2026-09-26T17:01:54+00:00"}</script>
+
+<div class="wrap">
+  <div class="inner">
+    <h1>How many people have COVID right now?</h1>
+    <p class="sub">
+      Estimates how many people are currently infectious from the WastewaterSCAN
+      reading for Portland, ME. The latest reading fills in automatically.
+    </p>
+    <a class="dash-link" href="https://data.wastewaterscan.org/tracker/?charts=CiUQACABSABSBjhiZWQ5MFoGTiBHZW5leKcBigEGNzIxZWQxwAEB&amp;selectedChartId=721ed1" target="_blank" rel="noreferrer">→ see the Portland chart on WastewaterSCAN</a>
+
+    <div class="card">
+      <div class="section-title first">Wastewater level</div>
+      <div class="reading-meta" id="reading-meta"></div>
+
+      <label class="mini-label" for="ww">SARS-CoV-2 N gene / PMMoV × 1M, 5-sample trend</label>
+      <input id="ww" inputmode="decimal" autocomplete="off" placeholder="e.g. 845">
+      <div class="input-note">
+        <span id="input-status"></span>
+        <button type="button" class="text-btn" id="use-latest" hidden>Use latest reading</button>
+      </div>
+
+      <div class="spark" id="spark"></div>
+
+      <div class="big-result">
+        <div class="big-num" id="one-in-n">—</div>
+        <div class="big-label">people currently infectious</div>
+        <div class="pct-chip" id="pct" hidden></div>
+      </div>
+
+      <div class="section-title">Estimated active infections</div>
+      <div class="two-col">
+        <div class="mini">
+          <div class="mini-label">Portland</div>
+          <div class="mini-val" id="portland">—</div>
+          <div class="mini-sub">total population ~68,000</div>
+        </div>
+        <div class="mini">
+          <div class="mini-label">Cumberland County</div>
+          <div class="mini-val" id="cumberland">—</div>
+          <div class="mini-sub">total population ~303,000</div>
+        </div>
+      </div>
+
+      <div class="section-title">Exposure in a gathering</div>
+      <div class="mini">
+        <label class="mini-label" for="room">Number of people in the gathering</label>
+        <input id="room" inputmode="numeric" value="200" autocomplete="off">
+      </div>
+      <div class="mini">
+        <div class="mini-val" id="at-least-one">—</div>
+        <div class="mini-sub">chance that at least one infectious person attends</div>
+      </div>
+      <div class="mini">
+        <div class="mini-val" id="expected">—</div>
+        <div class="mini-sub">infectious people would be expected to attend</div>
+      </div>
+    </div>
+
+    <p class="note">
+      Conservative, order-of-magnitude estimate of true prevalence, calibrated
+      to Portland, ME. The flat infectious window intentionally overestimates
+      (wastewater also captures post-infectious shedders). Absolute numbers are
+      ballpark; the ratio between any two readings is exact. Not medical advice.
+    </p>
+
+    <div class="sources">
+      <div class="sources-label">Data from these sources was also used to arrive at these estimates:</div>
+      <a class="source-link" href="https://www.medrxiv.org/content/10.1101/2025.09.01.25334793v1.full" target="_blank" rel="noreferrer">
+        → Lobay, Srivastava &amp; McDonald (2025), <em>From Wastewater to Infection Estimates: Incident COVID-19 Infections during Omicron in the U.S.</em>
+      </a>
+      <a class="source-link" href="https://usafacts.org/answers/how-did-covid-19-affect-people-in-the-us/state/maine/" target="_blank" rel="noreferrer">
+        → USAFacts, <em>How did COVID-19 affect people in Maine?</em>
+      </a>
+      <a class="source-link" href="https://data.wastewaterscan.org/" target="_blank" rel="noreferrer">
+        → WastewaterSCAN, Portland Water District (East End Wastewater Treatment Facility)
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Fixed calibration constant from the source analysis:
+  //   k = (173 cases/day * 10 infectious-days * 14 ascertainment) / 1,390,000 / 2400
+  //     ≈ 7.26e-6
+  // prevalence (fraction currently infectious) = wastewater * k
+  var K = (173 * 10 * 14) / 1390000 / 2400;
+  var POP = { portland: 68000, cumberland: 303000 };
+  var STALE_DAYS = 10;
+
+  var data = {};
+  try { data = JSON.parse(document.getElementById('ww-data').textContent); } catch (e) {}
+  var latest = data.latest || null;
+  var latestStr = latest ? String(Math.round(latest.trend * 10) / 10) : '';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var ww = $('ww'), room = $('room');
+
+  function fmtDate(iso, opts) {
+    var d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso);
+    return d.toLocaleDateString(undefined, opts || { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+  function fmtPct(x) {
+    if (x == null) return '—';
+    var pct = x * 100;
+    if (pct === 0) return '0%';
+    // choose decimal places so small values still show significant digits, no exponents
+    var dp = 4;
+    if (pct < 0.01) dp = 5;
+    if (pct < 0.001) dp = 6;
+    if (pct < 0.0001) dp = 7;
+    return pct.toFixed(dp).replace(/\.?0+$/, '') + '%';
+  }
+  function fmtN(n) { return n == null ? '—' : Math.round(n).toLocaleString(); }
+
+  function renderMeta() {
+    var meta = $('reading-meta');
+    if (!latest) {
+      meta.innerHTML = '<span class="chip warn">No automatic reading yet</span>';
+      return;
+    }
+    var ageDays = Math.floor((Date.now() - new Date(latest.date + 'T12:00:00').getTime()) / 86400000);
+    var chip = ageDays > STALE_DAYS
+      ? '<span class="chip warn">Latest sample is ' + ageDays + ' days old</span>'
+      : '<span class="chip live">Latest reading</span>';
+    var level = latest.level ? ' · WastewaterSCAN rates it “' + latest.level + '”' : '';
+    meta.innerHTML = chip + '<span>Sample collected ' + fmtDate(latest.date) + level + '</span>';
+    if (data.fetchedAt) {
+      var s = document.createElement('span');
+      s.textContent = 'Checked ' + fmtDate(data.fetchedAt, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      meta.appendChild(s);
+    }
+  }
+
+  function renderSpark() {
+    var h = data.history || [];
+    var box = $('spark');
+    if (h.length < 2) { box.hidden = true; return; }
+    var W = 600, H = 110, padL = 4, padR = 58, padT = 16, padB = 20;
+    var t0 = new Date(h[0][0]).getTime(), t1 = new Date(h[h.length - 1][0]).getTime();
+    var max = 0; h.forEach(function (p) { if (p[1] > max) max = p[1]; });
+    var yMax = max > 0 ? max * 1.08 : 1;
+    var x = function (d) { return padL + (new Date(d).getTime() - t0) / (t1 - t0 || 1) * (W - padL - padR); };
+    var y = function (v) { return padT + (1 - v / yMax) * (H - padT - padB); };
+    var line = h.map(function (p, i) { return (i ? 'L' : 'M') + x(p[0]).toFixed(1) + ' ' + y(p[1]).toFixed(1); }).join(' ');
+    var base = y(0).toFixed(1);
+    var area = line + ' L' + x(h[h.length - 1][0]).toFixed(1) + ' ' + base + ' L' + x(h[0][0]).toFixed(1) + ' ' + base + ' Z';
+    var last = h[h.length - 1];
+    var peak = h.reduce(function (a, b) { return b[1] > a[1] ? b : a; });
+    var ex = x(last[0]), ey = y(last[1]);
+    var svg =
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Portland wastewater trend, last ' + h.length + ' samples">' +
+        '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + base + '" y2="' + base + '" stroke="var(--line)" stroke-width="1"/>' +
+        '<path d="' + area + '" fill="var(--spark-fill)" stroke="none"/>' +
+        '<path d="' + line + '" fill="none" stroke="var(--spark)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
+        (peak !== last ? '<text x="' + x(peak[0]).toFixed(1) + '" y="' + (y(peak[1]) - 5).toFixed(1) + '" text-anchor="' + (x(peak[0]) < 40 ? 'start' : x(peak[0]) > W - padR - 40 ? 'end' : 'middle') + '">peak ' + peak[1].toFixed(0) + '</text>' : '') +
+        '<circle cx="' + ex.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="4" fill="var(--spark)" stroke="var(--card)" stroke-width="2"/>' +
+        '<text class="end-label" x="' + (ex + 9).toFixed(1) + '" y="' + (ey + 4).toFixed(1) + '">' + last[1].toFixed(1) + '</text>' +
+        '<text x="' + padL + '" y="' + (H - 4) + '">' + fmtDate(h[0][0], { month: 'short', year: 'numeric' }) + '</text>' +
+        '<text x="' + (W - padR) + '" y="' + (H - 4) + '" text-anchor="end">' + fmtDate(last[0], { month: 'short', day: 'numeric' }) + '</text>' +
+      '</svg>';
+    box.innerHTML = svg + '<div class="spark-caption">Portland trend, last 6 months</div>';
+  }
+
+  function render() {
+    var wwNum = parseFloat(ww.value);
+    var valid = !isNaN(wwNum) && wwNum >= 0;
+    var prevalence = valid ? wwNum * K : null;
+    var oneInN = prevalence && prevalence > 0 ? 1 / prevalence : null;
+
+    $('one-in-n').textContent = valid && oneInN ? '1 in ' + fmtN(oneInN) : '—';
+    $('pct').hidden = !valid;
+    $('pct').textContent = fmtPct(prevalence) + ' of people';
+    $('portland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.portland) + ' infections';
+    $('cumberland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.cumberland) + ' infections';
+
+    var R = parseInt(room.value, 10);
+    var roomValid = !isNaN(R) && R > 0 && prevalence != null;
+    var atLeastOne = roomValid ? 1 - Math.pow(1 - prevalence, R) : null;
+    var expected = roomValid ? R * prevalence : null;
+    $('at-least-one').textContent = atLeastOne == null ? '—' : (atLeastOne * 100).toFixed(atLeastOne < 0.1 ? 2 : 1) + '%';
+    $('expected').textContent = expected == null ? '—' : '~' + expected.toFixed(2);
+
+    var edited = latest && ww.value.trim() !== latestStr;
+    $('use-latest').hidden = !edited;
+    $('input-status').textContent = !latest
+      ? 'Enter the trend value from the WastewaterSCAN chart.'
+      : edited
+        ? 'Using your own number.'
+        : 'Filled in from WastewaterSCAN. Type a different number to try another level.';
+  }
+
+  ww.value = latestStr || '150';
+  ww.addEventListener('input', render);
+  room.addEventListener('input', render);
+  $('use-latest').addEventListener('click', function () { ww.value = latestStr; render(); ww.focus(); });
+
+  renderMeta();
+  renderSpark();
+  render();
+
+  // A home-screen app resumes where it left off instead of reloading, so pick up
+  // the latest daily build when it comes back after an hour or more.
+  var loadedAt = Date.now();
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && Date.now() - loadedAt > 3600000) location.reload();
+  });
+})();
+</script>
+</body>
+</html>
