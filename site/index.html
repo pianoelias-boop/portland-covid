@@ -8,94 +8,74 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="COVID Now">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#131716" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111715" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <title>Portland COVID Estimate</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
 <style>
   :root {
-    --ink: #1a1a1a;
-    --link: #2f6690;
-    --hero: #27433f;
-    --figure: #2f7d6b;
-    --muted: #6b6b6b;
-    --line: #e3e1dc;
-    --page: #f6f5f2;
-    --card: #ffffff;
-    --inset: #fafaf8;
-    --well: #f3f5f7;
-    --chip-bg: #eceae5;
+    --page: #f3f5f4;
+    --field: #ffffff;
+    --ink: #15201c;
+    --muted: #4d5b56;
+    --rule: #c9d1ce;
     --warn-ink: #8a4b12;
-    --warn-bg: #f7ead9;
-    --spark: #2f7d6b;
-    --spark-fill: rgba(47, 125, 107, 0.12);
-    --lv-0: #557c91;
-    --lv-1: #2f7d6b;
-    --lv-2: #6f8a2e;
-    --lv-3: #b07d16;
-    --lv-4: #c05a24;
-    --lv-5: #a8363a;
-    --level: var(--lv-1);
-    --shadow: 0 1px 0 #fff inset, 0 18px 40px -28px rgba(40, 30, 20, .5);
-    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-    --mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --warn-bg: #f6e6d2;
+    /* gauge segment fills (both themes) */
+    --seg-0: #6f8ea0;
+    --seg-1: #2f8a72;
+    --seg-2: #8aa33a;
+    --seg-3: #d9a321;
+    --seg-4: #d9692b;
+    --seg-5: #b8323a;
+    /* level word colors, darkened for text contrast on the light page */
+    --lv-0: #4c6c80;
+    --lv-1: #23735e;
+    --lv-2: #5d7519;
+    --lv-3: #8f6605;
+    --lv-4: #ad4a14;
+    --lv-5: #a3272f;
+    --level: var(--ink);
+    --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --ink: #ecebe6;
-      --link: #8cb9dd;
-      --hero: #a6d8cc;
-      --figure: #74c4ab;
-      --muted: #9ba39f;
-      --line: #2e3533;
-      --page: #131716;
-      --card: #1b201e;
-      --inset: #202624;
-      --well: #1e2427;
-      --chip-bg: #262c2a;
+      --page: #111715;
+      --field: #1a221f;
+      --ink: #e7eeeb;
+      --muted: #9aa8a3;
+      --rule: #2c3733;
       --warn-ink: #f0b77c;
       --warn-bg: #3a2a1a;
-      --spark: #74c4ab;
-      --spark-fill: rgba(116, 196, 171, 0.14);
-      --lv-0: #9bbdcd;
-      --lv-1: #74c4ab;
-      --lv-2: #b0cc72;
-      --lv-3: #e2b659;
-      --lv-4: #ee8b57;
-      --lv-5: #ef7474;
-      --shadow: 0 18px 40px -28px rgba(0, 0, 0, .8);
+      --lv-0: #9fbccc;
+      --lv-1: #6fcaa9;
+      --lv-2: #b3cf6b;
+      --lv-3: #f0c14f;
+      --lv-4: #f39157;
+      --lv-5: #f27a7f;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --ink: #ecebe6;
-    --link: #8cb9dd;
-    --hero: #a6d8cc;
-    --figure: #74c4ab;
-    --muted: #9ba39f;
-    --line: #2e3533;
-    --page: #131716;
-    --card: #1b201e;
-    --inset: #202624;
-    --well: #1e2427;
-    --chip-bg: #262c2a;
+    --page: #111715;
+    --field: #1a221f;
+    --ink: #e7eeeb;
+    --muted: #9aa8a3;
+    --rule: #2c3733;
     --warn-ink: #f0b77c;
     --warn-bg: #3a2a1a;
-    --spark: #74c4ab;
-    --spark-fill: rgba(116, 196, 171, 0.14);
-    --lv-0: #9bbdcd;
-    --lv-1: #74c4ab;
-    --lv-2: #b0cc72;
-    --lv-3: #e2b659;
-    --lv-4: #ee8b57;
-    --lv-5: #ef7474;
-    --shadow: 0 18px 40px -28px rgba(0, 0, 0, .8);
+    --lv-0: #9fbccc;
+    --lv-1: #6fcaa9;
+    --lv-2: #b3cf6b;
+    --lv-3: #f0c14f;
+    --lv-4: #f39157;
+    --lv-5: #f27a7f;
   }
 
   html { -webkit-text-size-adjust: 100%; }
@@ -105,341 +85,188 @@
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
     background: var(--page);
     color: var(--ink);
-    font-family: var(--serif);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.45;
   }
-  .wrap { padding: 32px 16px 40px; }
-  .inner { max-width: 620px; margin: 0 auto; }
+  .wrap { padding: 22px 16px 40px; max-width: 540px; margin: 0 auto; }
+  a { color: var(--ink); text-underline-offset: 3px; }
 
-  a { color: var(--link); }
-
-  .top { margin-bottom: 22px; }
-  .kicker {
-    font-family: var(--mono);
+  .label {
+    display: block;
     font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.22em;
+    font-weight: 650;
+    font-stretch: 118%;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--hero);
-    margin: 0 0 18px;
-  }
-  .level-lead { font-size: 17px; color: var(--muted); margin: 0; }
-  .level-word {
-    font-weight: 900;
-    font-size: clamp(48px, 14vw, 78px);
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    color: var(--level);
-    margin: 2px 0 16px;
-  }
-  .scale {
-    list-style: none;
-    margin: 0 0 14px;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
-    max-width: 500px;
-    font-family: var(--mono);
-    font-size: 10.5px;
     color: var(--muted);
+    margin: 0;
   }
-  .scale li { display: grid; gap: 5px; align-content: start; line-height: 1.2; }
-  .scale span { height: 7px; border-radius: 4px; background: var(--line); }
-  .scale li:nth-child(1) span { background: color-mix(in srgb, var(--lv-0) 30%, var(--line)); }
-  .scale li:nth-child(2) span { background: color-mix(in srgb, var(--lv-1) 30%, var(--line)); }
-  .scale li:nth-child(3) span { background: color-mix(in srgb, var(--lv-2) 30%, var(--line)); }
-  .scale li:nth-child(4) span { background: color-mix(in srgb, var(--lv-3) 30%, var(--line)); }
-  .scale li:nth-child(5) span { background: color-mix(in srgb, var(--lv-4) 30%, var(--line)); }
-  .scale li:nth-child(6) span { background: color-mix(in srgb, var(--lv-5) 30%, var(--line)); }
-  .scale li.on { color: var(--ink); font-weight: 600; }
-  .scale li.on span { background: var(--level); height: 9px; margin-top: -2px; }
+  .muted { color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* level */
+  .top { text-align: center; }
+  .top .label { text-align: left; }
+  .gauge { display: block; width: min(100%, 300px); height: auto; margin: 14px auto 0; }
+  .level-word {
+    font-weight: 850;
+    font-stretch: 112%;
+    font-size: clamp(34px, 11vw, 46px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--level);
+    margin-top: 6px;
+  }
+  .meta { font-size: 12.5px; color: var(--muted); margin-top: 8px; display: grid; gap: 2px; }
+  .chip { display: inline-block; justify-self: center; font-size: 12px; font-weight: 600; color: var(--warn-ink); background: var(--warn-bg); padding: 3px 10px; margin-bottom: 4px; }
+
+  .section { border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 14px; }
+  .section.major { border-top: 2px solid var(--ink); margin-top: 22px; }
 
   .override {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 12px;
-    font-family: var(--mono);
-    font-size: 12px;
-    line-height: 1.45;
-    color: var(--warn-ink);
-    background: var(--warn-bg);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 16px;
-  }
-  .override .text-btn { color: var(--warn-ink); }
-  .dash-link {
-    font-family: var(--mono);
-    font-size: 12.5px;
-    text-underline-offset: 3px;
-    display: inline-block;
-    margin-top: 14px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+    font-size: 13px; color: var(--warn-ink); background: var(--warn-bg);
+    padding: 10px 12px; margin-top: 18px;
   }
 
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: var(--shadow);
-  }
-  .section-title {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin: 28px 0 12px;
-    padding-top: 18px;
-    border-top: 2px solid var(--line);
-  }
-  .section-title.first { margin-top: 0; padding-top: 0; border-top: none; }
+  .big { font-weight: 850; font-stretch: 88%; font-size: clamp(40px, 13vw, 58px); line-height: 1; letter-spacing: -0.01em; }
+  .big-sub { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; font-size: 13.5px; color: var(--muted); margin-top: 6px; }
 
-  .reading-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .chip {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    border-radius: 999px;
-    padding: 3px 10px;
-    background: var(--chip-bg);
-    border: 1px solid var(--line);
-    color: var(--muted);
-  }
-  .chip.live { color: var(--figure); }
-  .chip.warn { color: var(--warn-ink); background: var(--warn-bg); border-color: transparent; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .val { font-weight: 800; font-stretch: 92%; font-size: 26px; line-height: 1.1; }
+  .sub { font-size: 12.5px; color: var(--muted); }
 
-  #ww {
-    width: 100%;
-    box-sizing: border-box;
-    font-family: var(--mono);
-    font-size: 30px;
-    font-weight: 600;
-    padding: 14px 16px;
-    border-radius: 12px;
-    border: 2px solid var(--line);
-    background: var(--inset);
-    color: var(--ink);
-    outline: none;
-    font-variant-numeric: tabular-nums;
+  .stepper { display: flex; width: fit-content; max-width: 100%; height: 48px; margin-top: 8px; }
+  .stepper button {
+    width: 52px; flex: none;
+    font: inherit; font-size: 24px; font-weight: 500; line-height: 1;
+    color: var(--ink); background: var(--page);
+    border: 2px solid var(--ink); border-radius: 0; padding: 0; cursor: pointer;
+    touch-action: manipulation;
   }
-  input:focus-visible { border-color: var(--link) !important; }
-  .input-note {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 10px;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: var(--muted);
-    margin-top: 8px;
-    line-height: 1.4;
+  .stepper button:active { background: var(--ink); color: var(--page); }
+  .stepper input {
+    flex: none; width: 5.5ch; min-width: 0;
+    border: 2px solid var(--ink); border-left: none; border-right: none; border-radius: 0;
+    background: var(--field); color: var(--ink);
+    font: inherit; font-weight: 800; font-size: 22px; text-align: center;
+    -webkit-appearance: none; appearance: none; outline: none;
   }
-  .text-btn {
-    font: inherit;
-    color: var(--link);
-    background: none;
-    border: none;
-    padding: 0;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
+  .field {
+    display: block; width: 8.5ch; max-width: 100%; box-sizing: border-box; height: 52px; margin-top: 8px;
+    border: 2px solid var(--ink); border-radius: 0; background: var(--field); color: var(--ink);
+    font: inherit; font-weight: 800; font-size: 24px; padding: 0 12px;
+    -webkit-appearance: none; appearance: none; outline: none;
   }
-  .text-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 3px; }
+  input:focus-visible, button:focus-visible { outline: 3px solid var(--seg-1); outline-offset: 2px; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 12px; }
+  .row .val { font-size: 28px; }
+
+  .text-btn { font: inherit; font-weight: 600; color: inherit; background: none; border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .note-line { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
 
   .spark { margin-top: 16px; }
   .spark svg { display: block; width: 100%; height: auto; overflow: visible; }
-  .spark text { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); }
-  .spark .end-label { fill: var(--figure); font-weight: 600; }
-  .spark-caption { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .spark text { font-family: var(--font); font-size: 11px; fill: var(--muted); }
+  .spark .end-label { fill: var(--ink); font-weight: 700; }
 
-  .big-result {
-    padding: 24px 20px;
-    border-radius: 14px;
-    background: var(--well);
-    border: 1px solid var(--line);
-    text-align: center;
-  }
-  .big-num {
-    font-family: var(--mono);
-    font-weight: 600;
-    font-size: clamp(36px, 10vw, 60px);
-    color: var(--hero);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
-  }
-  .big-label { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 10px; }
-  .pct-chip {
-    display: inline-block;
-    margin-top: 12px;
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--muted);
-    background: var(--chip-bg);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 5px 12px;
-  }
-
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 440px) { .two-col { grid-template-columns: 1fr; } }
-  .mini {
-    background: var(--inset);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 16px;
-  }
-  .mini + .mini { margin-top: 12px; }
-  .two-col .mini + .mini { margin-top: 0; }
-  .mini-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .mini-val { font-family: var(--mono); font-size: 24px; font-weight: 600; color: var(--figure); font-variant-numeric: tabular-nums; }
-  .mini-sub { font-family: var(--mono); font-size: 11.5px; line-height: 1.4; color: var(--muted); margin-top: 5px; }
-  #room {
-    font-family: var(--mono);
-    font-size: 20px;
-    font-weight: 600;
-    padding: 6px 9px;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 9px;
-    border: 1.5px solid var(--line);
-    background: var(--card);
-    color: var(--ink);
-    outline: none;
-  }
-
-  .note { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-top: 22px; font-style: italic; max-width: 65ch; }
-  .sources { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
-  .sources-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-  .source-link {
-    display: block;
-    font-size: 13px;
-    text-decoration: none;
-    line-height: 1.5;
-    margin-bottom: 10px;
-    border-bottom: 1px dotted var(--line);
-    padding-bottom: 10px;
-  }
-  ::selection { background: var(--hero); color: var(--card); }
+  .fine { font-size: 12.5px; color: var(--muted); line-height: 1.55; max-width: 65ch; }
+  .sources a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; padding: 9px 0; border-bottom: 1px solid var(--rule); }
+  .sources a:last-child { border-bottom: none; }
+  @media (prefers-reduced-motion: reduce) { .stepper button:active { transition: none; } }
 </style>
-
 </head>
 <body>
-<script id="ww-data" type="application/json">{"latest":{"date":"2026-09-21","trend":42.24,"sample":35.59,"level":"very low"},"history":[["2026-03-25",177.34],["2026-03-27",176.4],["2026-03-30",162.91],["2026-04-01",162.91],["2026-04-03",148.95],["2026-04-06",148.95],["2026-04-08",121.67],["2026-04-09",81.08],["2026-04-13",58.25],["2026-04-30",24.2],["2026-05-01",19.37],["2026-05-04",19.37],["2026-05-06",23.59],["2026-05-08",18.65],["2026-05-11",21.19],["2026-05-13",18.46],["2026-05-15",14.14],["2026-05-18",8.49],["2026-05-20",11.02],["2026-05-22",15.21],["2026-05-26",36.61],["2026-05-28",31.24],["2026-05-30",31.24],["2026-06-01",21.4],["2026-06-03",0.0],["2026-06-05",0.0],["2026-06-08",0.0],["2026-06-10",0.0],["2026-06-12",0.0],["2026-06-15",0.0],["2026-06-17",0.0],["2026-06-22",0.0],["2026-06-24",0.0],["2026-06-26",8.8],["2026-07-01",8.8],["2026-07-05",15.77],["2026-07-08",11.14],["2026-07-10",24.46],["2026-07-13",19.87],["2026-07-15",19.87],["2026-07-17",12.9],["2026-07-20",8.73],["2026-07-22",0.0],["2026-07-24",0.0],["2026-07-27",4.66],["2026-07-29",8.02],["2026-07-31",14.14],["2026-08-03",17.17],["2026-08-06",14.54],["2026-08-07",20.98],["2026-08-10",23.63],["2026-08-12",32.96],["2026-08-14",30.29],["2026-08-17",30.29],["2026-08-19",24.79],["2026-08-21",25.15],["2026-08-24",23.72],["2026-08-26",25.27],["2026-08-28",28.99],["2026-08-31",25.27],["2026-09-02",33.49],["2026-09-04",31.46],["2026-09-09",38.78],["2026-09-10",35.56],["2026-09-11",49.61],["2026-09-16",46.75],["2026-09-18",52.32],["2026-09-21",42.24]],"sourceUpdated":"2026-09-27T09:22:03.792829","fetchedAt":"2026-09-27T16:37:24+00:00"}</script>
+<script id="ww-data" type="application/json">{"latest":{"date":"2026-09-21","trend":42.24,"sample":35.59,"level":"very low"},"history":[["2026-03-25",177.34],["2026-03-27",176.4],["2026-03-30",162.91],["2026-04-01",162.91],["2026-04-03",148.95],["2026-04-06",148.95],["2026-04-08",121.67],["2026-04-09",81.08],["2026-04-13",58.25],["2026-04-30",24.2],["2026-05-01",19.37],["2026-05-04",19.37],["2026-05-06",23.59],["2026-05-08",18.65],["2026-05-11",21.19],["2026-05-13",18.46],["2026-05-15",14.14],["2026-05-18",8.49],["2026-05-20",11.02],["2026-05-22",15.21],["2026-05-26",36.61],["2026-05-28",31.24],["2026-05-30",31.24],["2026-06-01",21.4],["2026-06-03",0.0],["2026-06-05",0.0],["2026-06-08",0.0],["2026-06-10",0.0],["2026-06-12",0.0],["2026-06-15",0.0],["2026-06-17",0.0],["2026-06-22",0.0],["2026-06-24",0.0],["2026-06-26",8.8],["2026-07-01",8.8],["2026-07-05",15.77],["2026-07-08",11.14],["2026-07-10",24.46],["2026-07-13",19.87],["2026-07-15",19.87],["2026-07-17",12.9],["2026-07-20",8.73],["2026-07-22",0.0],["2026-07-24",0.0],["2026-07-27",4.66],["2026-07-29",8.02],["2026-07-31",14.14],["2026-08-03",17.17],["2026-08-06",14.54],["2026-08-07",20.98],["2026-08-10",23.63],["2026-08-12",32.96],["2026-08-14",30.29],["2026-08-17",30.29],["2026-08-19",24.79],["2026-08-21",25.15],["2026-08-24",23.72],["2026-08-26",25.27],["2026-08-28",28.99],["2026-08-31",25.27],["2026-09-02",33.49],["2026-09-04",31.46],["2026-09-09",38.78],["2026-09-10",35.56],["2026-09-11",49.61],["2026-09-16",46.75],["2026-09-18",52.32],["2026-09-21",42.24]],"sourceUpdated":"2026-09-27T09:22:03.792829","fetchedAt":"2026-09-27T17:05:32+00:00"}</script>
 
 <div class="wrap">
-  <div class="inner">
-    <header class="top">
-      <h1 class="kicker">COVID in Portland, ME</h1>
-      <p class="level-lead">Current level</p>
-      <div class="level-word" id="level-word">—</div>
-      <ol class="scale" id="scale" aria-label="COVID level scale">
-        <li data-level="near zero"><span></span>near zero</li>
-        <li data-level="very low"><span></span>very low</li>
-        <li data-level="low"><span></span>low</li>
-        <li data-level="medium"><span></span>medium</li>
-        <li data-level="high"><span></span>high</li>
-        <li data-level="very high"><span></span>very high</li>
-      </ol>
-      <div class="reading-meta" id="reading-meta"></div>
-    </header>
+  <header class="top">
+    <h1 class="label">Portland, ME · COVID level today</h1>
+    <svg class="gauge" viewBox="0 0 160 88" role="img" aria-labelledby="level-word">
+      <path d="M20 80 A60 60 0 0 1 28.04 50" fill="none" stroke="var(--seg-0)" stroke-width="16"/>
+      <path d="M28.04 50 A60 60 0 0 1 50 28.04" fill="none" stroke="var(--seg-1)" stroke-width="16"/>
+      <path d="M50 28.04 A60 60 0 0 1 80 20" fill="none" stroke="var(--seg-2)" stroke-width="16"/>
+      <path d="M80 20 A60 60 0 0 1 110 28.04" fill="none" stroke="var(--seg-3)" stroke-width="16"/>
+      <path d="M110 28.04 A60 60 0 0 1 131.96 50" fill="none" stroke="var(--seg-4)" stroke-width="16"/>
+      <path d="M131.96 50 A60 60 0 0 1 140 80" fill="none" stroke="var(--seg-5)" stroke-width="16"/>
+      <g id="needle" transform="rotate(0 80 80)">
+        <line x1="80" y1="80" x2="30" y2="80" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <circle cx="80" cy="80" r="7" fill="var(--ink)"/>
+    </svg>
+    <div class="level-word" id="level-word">—</div>
+    <div class="meta" id="reading-meta"></div>
+  </header>
 
-    <div class="card">
-      <div class="override" id="override" hidden>
-        <span>These numbers use your wastewater number, <strong id="override-val"></strong>, not the latest reading.</span>
-        <button type="button" class="text-btn" id="use-latest-top">Use latest reading</button>
-      </div>
+  <div class="override" id="override" hidden>
+    <span>These numbers use your wastewater number, <strong id="override-val"></strong>, not the latest reading.</span>
+    <button type="button" class="text-btn" id="use-latest-top">Use latest reading</button>
+  </div>
 
-      <div class="big-result">
-        <div class="big-num" id="one-in-n">—</div>
-        <div class="big-label">people currently infectious</div>
-        <div class="pct-chip" id="pct" hidden></div>
-      </div>
+  <section class="section major">
+    <div class="big num" id="one-in-n">—</div>
+    <div class="big-sub"><span>people infectious right now</span><span class="num" id="pct"></span></div>
+  </section>
 
-      <div class="section-title">Estimated active infections</div>
-      <div class="two-col">
-        <div class="mini">
-          <div class="mini-label">Portland</div>
-          <div class="mini-val" id="portland">—</div>
-          <div class="mini-sub">total population ~68,000</div>
-        </div>
-        <div class="mini">
-          <div class="mini-label">Cumberland County</div>
-          <div class="mini-val" id="cumberland">—</div>
-          <div class="mini-sub">total population ~303,000</div>
-        </div>
+  <section class="section">
+    <h2 class="label">Estimated active infections</h2>
+    <div class="pair">
+      <div>
+        <div class="val num" id="portland">—</div>
+        <div class="sub">Portland · pop. ~68,000</div>
       </div>
-
-      <div class="section-title">Exposure in a gathering</div>
-      <div class="mini">
-        <label class="mini-label" for="room">Number of people in the gathering</label>
-        <input id="room" inputmode="numeric" value="200" autocomplete="off">
+      <div>
+        <div class="val num" id="cumberland">—</div>
+        <div class="sub">Cumberland County · pop. ~303,000</div>
       </div>
-      <div class="mini">
-        <div class="mini-val" id="at-least-one">—</div>
-        <div class="mini-sub">chance that at least one infectious person attends</div>
-      </div>
-      <div class="mini">
-        <div class="mini-val" id="expected">—</div>
-        <div class="mini-sub">infectious people would be expected to attend</div>
-      </div>
-
-      <div class="section-title">Wastewater level</div>
-      <label class="mini-label" for="ww">SARS-CoV-2 N gene / PMMoV × 1M, 5-sample trend</label>
-      <input id="ww" inputmode="decimal" autocomplete="off" placeholder="e.g. 845">
-      <div class="input-note">
-        <span id="input-status"></span>
-        <button type="button" class="text-btn" id="use-latest" hidden>Use latest reading</button>
-      </div>
-      <div class="spark" id="spark"></div>
-      <a class="dash-link" href="https://data.wastewaterscan.org/tracker/?charts=CiUQACABSABSBjhiZWQ5MFoGTiBHZW5leKcBigEGNzIxZWQxwAEB&amp;selectedChartId=721ed1" target="_blank" rel="noreferrer">→ see the Portland chart on WastewaterSCAN</a>
     </div>
+  </section>
 
-    <p class="note">
+  <section class="section major">
+    <label class="label" for="room">People at a gathering</label>
+    <div class="stepper">
+      <button type="button" id="room-down" aria-label="10 fewer people">−</button>
+      <input id="room" inputmode="numeric" pattern="[0-9]*" value="200" autocomplete="off">
+      <button type="button" id="room-up" aria-label="10 more people">+</button>
+    </div>
+    <div class="row">
+      <span class="sub">Chance at least one infectious person attends</span>
+      <span class="val num" id="at-least-one">—</span>
+    </div>
+    <div class="row">
+      <span class="sub">Infectious people expected to attend</span>
+      <span class="val num" id="expected">—</span>
+    </div>
+  </section>
+
+  <section class="section major">
+    <label class="label" for="ww">Wastewater level</label>
+    <input class="field num" id="ww" inputmode="decimal" autocomplete="off" placeholder="845">
+    <div class="note-line">
+      <span id="input-status"></span>
+      <button type="button" class="text-btn" id="use-latest" hidden>Use latest reading</button>
+    </div>
+    <div class="note-line">SARS-CoV-2 N gene ÷ PMMoV × 1M, 5-sample trend</div>
+    <div class="spark" id="spark"></div>
+    <div class="note-line"><a href="https://data.wastewaterscan.org/tracker/?charts=CiUQACABSABSBjhiZWQ5MFoGTiBHZW5leKcBigEGNzIxZWQxwAEB&amp;selectedChartId=721ed1" target="_blank" rel="noreferrer">See the Portland chart on WastewaterSCAN</a></div>
+  </section>
+
+  <section class="section">
+    <p class="fine">
       Conservative, order-of-magnitude estimate of true prevalence, calibrated
       to Portland, ME. The flat infectious window intentionally overestimates
       (wastewater also captures post-infectious shedders). Absolute numbers are
       ballpark; the ratio between any two readings is exact. Not medical advice.
     </p>
-
+    <h2 class="label" style="margin-top:16px">Sources</h2>
     <div class="sources">
-      <div class="sources-label">Data from these sources was also used to arrive at these estimates:</div>
-      <a class="source-link" href="https://www.medrxiv.org/content/10.1101/2025.09.01.25334793v1.full" target="_blank" rel="noreferrer">
-        → Lobay, Srivastava &amp; McDonald (2025), <em>From Wastewater to Infection Estimates: Incident COVID-19 Infections during Omicron in the U.S.</em>
-      </a>
-      <a class="source-link" href="https://usafacts.org/answers/how-did-covid-19-affect-people-in-the-us/state/maine/" target="_blank" rel="noreferrer">
-        → USAFacts, <em>How did COVID-19 affect people in Maine?</em>
-      </a>
-      <a class="source-link" href="https://data.wastewaterscan.org/" target="_blank" rel="noreferrer">
-        → WastewaterSCAN, Portland Water District (East End Wastewater Treatment Facility)
-      </a>
+      <a href="https://www.medrxiv.org/content/10.1101/2025.09.01.25334793v1.full" target="_blank" rel="noreferrer">Lobay, Srivastava &amp; McDonald (2025), <em>From Wastewater to Infection Estimates: Incident COVID-19 Infections during Omicron in the U.S.</em></a>
+      <a href="https://usafacts.org/answers/how-did-covid-19-affect-people-in-the-us/state/maine/" target="_blank" rel="noreferrer">USAFacts, <em>How did COVID-19 affect people in Maine?</em></a>
+      <a href="https://data.wastewaterscan.org/" target="_blank" rel="noreferrer">WastewaterSCAN, Portland Water District (East End Wastewater Treatment Facility)</a>
     </div>
-  </div>
+  </section>
 </div>
 
 <script>
@@ -455,6 +282,7 @@
   // i.e. roughly 1 in 20,000 people or fewer currently infectious.
   var LEVELS = ['near zero', 'very low', 'low', 'medium', 'high', 'very high'];
   var NEAR_ZERO = 7;
+  var ROOM_STEP = 10;
 
   var data = {};
   try { data = JSON.parse(document.getElementById('ww-data').textContent); } catch (e) {}
@@ -469,7 +297,7 @@
     return d.toLocaleDateString(undefined, opts || { month: 'short', day: 'numeric', year: 'numeric' });
   }
   function fmtPct(x) {
-    if (x == null) return '—';
+    if (x == null) return '';
     var pct = x * 100;
     if (pct === 0) return '0%';
     // choose decimal places so small values still show significant digits, no exponents
@@ -481,29 +309,46 @@
   }
   function fmtN(n) { return n == null ? '—' : Math.round(n).toLocaleString(); }
 
+  function setNeedle(index) {
+    var needle = $('needle');
+    // Segment i spans 180-30i .. 150-30i degrees; point at its middle.
+    var target = index == null ? 0 : 15 + 30 * index;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || index == null) { needle.setAttribute('transform', 'rotate(' + target + ' 80 80)'); return; }
+    var start = null, dur = 900;
+    function step(t) {
+      if (start === null) start = t;
+      var p = Math.min(1, (t - start) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      needle.setAttribute('transform', 'rotate(' + (target * e).toFixed(2) + ' 80 80)');
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
   function renderLevel() {
     var rated = latest && LEVELS.indexOf(latest.level) > 0 ? latest.level : null;
     var nearZero = !!latest && latest.trend < NEAR_ZERO;
     var level = nearZero ? 'near zero' : rated;
-    var word = $('level-word');
-    word.textContent = level ? level.charAt(0).toUpperCase() + level.slice(1) : 'Not rated';
-    document.documentElement.style.setProperty('--level', level ? 'var(--lv-' + LEVELS.indexOf(level) + ')' : 'var(--muted)');
-    Array.prototype.forEach.call($('scale').children, function (li) {
-      var on = li.getAttribute('data-level') === level;
-      li.classList.toggle('on', on);
-      if (on) li.setAttribute('aria-current', 'true'); else li.removeAttribute('aria-current');
-    });
+    var idx = level ? LEVELS.indexOf(level) : null;
+    $('level-word').textContent = level || 'Not rated';
+    document.documentElement.style.setProperty('--level', idx == null ? 'var(--muted)' : 'var(--lv-' + idx + ')');
+    $('needle').style.visibility = idx == null ? 'hidden' : 'visible';
+    setNeedle(idx);
 
     var meta = $('reading-meta');
     meta.textContent = '';
     if (!latest) {
-      meta.innerHTML = '<span class="chip warn">No reading available yet</span>';
+      var none = document.createElement('span');
+      none.className = 'chip';
+      none.textContent = 'No reading available yet';
+      meta.appendChild(none);
       return;
     }
     var ageDays = Math.floor((Date.now() - new Date(latest.date + 'T12:00:00').getTime()) / 86400000);
     if (ageDays > STALE_DAYS) {
       var warn = document.createElement('span');
-      warn.className = 'chip warn';
+      warn.className = 'chip';
       warn.textContent = 'Latest sample is ' + ageDays + ' days old';
       meta.appendChild(warn);
     }
@@ -536,18 +381,17 @@
     var last = h[h.length - 1];
     var peak = h.reduce(function (a, b) { return b[1] > a[1] ? b : a; });
     var ex = x(last[0]), ey = y(last[1]);
-    var svg =
-      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Portland wastewater trend, last ' + h.length + ' samples">' +
-        '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + base + '" y2="' + base + '" stroke="var(--line)" stroke-width="1"/>' +
-        '<path d="' + area + '" fill="var(--spark-fill)" stroke="none"/>' +
-        '<path d="' + line + '" fill="none" stroke="var(--spark)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
+    box.innerHTML =
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Portland wastewater trend, last 6 months">' +
+        '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + base + '" y2="' + base + '" stroke="var(--rule)" stroke-width="1"/>' +
+        '<path d="' + area + '" fill="var(--rule)" fill-opacity="0.45" stroke="none"/>' +
+        '<path d="' + line + '" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
         (peak !== last ? '<text x="' + x(peak[0]).toFixed(1) + '" y="' + (y(peak[1]) - 5).toFixed(1) + '" text-anchor="' + (x(peak[0]) < 40 ? 'start' : x(peak[0]) > W - padR - 40 ? 'end' : 'middle') + '">peak ' + peak[1].toFixed(0) + '</text>' : '') +
-        '<circle cx="' + ex.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="4" fill="var(--spark)" stroke="var(--card)" stroke-width="2"/>' +
+        '<circle cx="' + ex.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="4.5" fill="var(--ink)" stroke="var(--page)" stroke-width="2"/>' +
         '<text class="end-label" x="' + (ex + 9).toFixed(1) + '" y="' + (ey + 4).toFixed(1) + '">' + last[1].toFixed(1) + '</text>' +
         '<text x="' + padL + '" y="' + (H - 4) + '">' + fmtDate(h[0][0], { month: 'short', year: 'numeric' }) + '</text>' +
         '<text x="' + (W - padR) + '" y="' + (H - 4) + '" text-anchor="end">' + fmtDate(last[0], { month: 'short', day: 'numeric' }) + '</text>' +
       '</svg>';
-    box.innerHTML = svg + '<div class="spark-caption">Portland trend, last 6 months</div>';
   }
 
   function render() {
@@ -557,10 +401,9 @@
     var oneInN = prevalence && prevalence > 0 ? 1 / prevalence : null;
 
     $('one-in-n').textContent = valid && oneInN ? '1 in ' + fmtN(oneInN) : valid && prevalence === 0 ? 'None detected' : '—';
-    $('pct').hidden = !valid;
-    $('pct').textContent = fmtPct(prevalence) + ' of people';
-    $('portland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.portland) + ' infections';
-    $('cumberland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.cumberland) + ' infections';
+    $('pct').textContent = valid ? fmtPct(prevalence) + ' of people' : '';
+    $('portland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.portland);
+    $('cumberland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.cumberland);
 
     var R = parseInt(room.value, 10);
     var roomValid = !isNaN(R) && R > 0 && prevalence != null;
@@ -575,16 +418,23 @@
     $('override-val').textContent = ww.value.trim() || 'blank';
     $('input-status').textContent = !latest
       ? 'Enter the trend value from the WastewaterSCAN chart.'
-      : edited
-        ? 'Using your own number.'
-        : 'Filled in from the latest reading. Type a different number to see results for another level.';
+      : edited ? 'Using your own number.' : 'Latest reading. Type a different number to try another level.';
   }
 
+  function bumpRoom(delta) {
+    var R = parseInt(room.value, 10);
+    if (isNaN(R)) R = 0;
+    var next = delta > 0 ? Math.floor(R / ROOM_STEP) * ROOM_STEP + ROOM_STEP : Math.ceil(R / ROOM_STEP) * ROOM_STEP - ROOM_STEP;
+    room.value = String(Math.max(1, next));
+    render();
+  }
   function useLatest() { ww.value = latestStr; render(); }
 
   ww.value = latestStr || '150';
   ww.addEventListener('input', render);
   room.addEventListener('input', render);
+  $('room-down').addEventListener('click', function () { bumpRoom(-1); });
+  $('room-up').addEventListener('click', function () { bumpRoom(1); });
   $('use-latest').addEventListener('click', function () { useLatest(); ww.focus(); });
   $('use-latest-top').addEventListener('click', useLatest);
 
