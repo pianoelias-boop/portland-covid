@@ -34,6 +34,7 @@
     --warn-bg: #f7ead9;
     --spark: #2f7d6b;
     --spark-fill: rgba(47, 125, 107, 0.12);
+    --lv-0: #557c91;
     --lv-1: #2f7d6b;
     --lv-2: #6f8a2e;
     --lv-3: #b07d16;
@@ -62,6 +63,7 @@
       --warn-bg: #3a2a1a;
       --spark: #74c4ab;
       --spark-fill: rgba(116, 196, 171, 0.14);
+      --lv-0: #9bbdcd;
       --lv-1: #74c4ab;
       --lv-2: #b0cc72;
       --lv-3: #e2b659;
@@ -87,6 +89,7 @@
     --warn-bg: #3a2a1a;
     --spark: #74c4ab;
     --spark-fill: rgba(116, 196, 171, 0.14);
+    --lv-0: #9bbdcd;
     --lv-1: #74c4ab;
     --lv-2: #b0cc72;
     --lv-3: #e2b659;
@@ -133,20 +136,21 @@
     margin: 0 0 14px;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 4px;
-    max-width: 440px;
+    max-width: 500px;
     font-family: var(--mono);
     font-size: 10.5px;
     color: var(--muted);
   }
-  .scale li { display: grid; gap: 5px; }
+  .scale li { display: grid; gap: 5px; align-content: start; line-height: 1.2; }
   .scale span { height: 7px; border-radius: 4px; background: var(--line); }
-  .scale li:nth-child(1) span { background: color-mix(in srgb, var(--lv-1) 30%, var(--line)); }
-  .scale li:nth-child(2) span { background: color-mix(in srgb, var(--lv-2) 30%, var(--line)); }
-  .scale li:nth-child(3) span { background: color-mix(in srgb, var(--lv-3) 30%, var(--line)); }
-  .scale li:nth-child(4) span { background: color-mix(in srgb, var(--lv-4) 30%, var(--line)); }
-  .scale li:nth-child(5) span { background: color-mix(in srgb, var(--lv-5) 30%, var(--line)); }
+  .scale li:nth-child(1) span { background: color-mix(in srgb, var(--lv-0) 30%, var(--line)); }
+  .scale li:nth-child(2) span { background: color-mix(in srgb, var(--lv-1) 30%, var(--line)); }
+  .scale li:nth-child(3) span { background: color-mix(in srgb, var(--lv-2) 30%, var(--line)); }
+  .scale li:nth-child(4) span { background: color-mix(in srgb, var(--lv-3) 30%, var(--line)); }
+  .scale li:nth-child(5) span { background: color-mix(in srgb, var(--lv-4) 30%, var(--line)); }
+  .scale li:nth-child(6) span { background: color-mix(in srgb, var(--lv-5) 30%, var(--line)); }
   .scale li.on { color: var(--ink); font-weight: 600; }
   .scale li.on span { background: var(--level); height: 9px; margin-top: -2px; }
 
@@ -354,7 +358,8 @@
       <h1 class="kicker">COVID in Portland, ME</h1>
       <p class="level-lead">Current level</p>
       <div class="level-word" id="level-word">—</div>
-      <ol class="scale" id="scale" aria-label="WastewaterSCAN level scale">
+      <ol class="scale" id="scale" aria-label="COVID level scale">
+        <li data-level="near zero"><span></span>near zero</li>
         <li data-level="very low"><span></span>very low</li>
         <li data-level="low"><span></span>low</li>
         <li data-level="medium"><span></span>medium</li>
@@ -446,7 +451,10 @@
   var K = (173 * 10 * 14) / 1390000 / 2400;
   var POP = { portland: 68000, cumberland: 303000 };
   var STALE_DAYS = 10;
-  var LEVELS = ['very low', 'low', 'medium', 'high', 'very high'];
+  // WastewaterSCAN's own ratings, plus "near zero" for a trend value under 7,
+  // i.e. roughly 1 in 20,000 people or fewer currently infectious.
+  var LEVELS = ['near zero', 'very low', 'low', 'medium', 'high', 'very high'];
+  var NEAR_ZERO = 7;
 
   var data = {};
   try { data = JSON.parse(document.getElementById('ww-data').textContent); } catch (e) {}
@@ -474,10 +482,12 @@
   function fmtN(n) { return n == null ? '—' : Math.round(n).toLocaleString(); }
 
   function renderLevel() {
-    var level = latest && LEVELS.indexOf(latest.level) >= 0 ? latest.level : null;
+    var rated = latest && LEVELS.indexOf(latest.level) > 0 ? latest.level : null;
+    var nearZero = !!latest && latest.trend < NEAR_ZERO;
+    var level = nearZero ? 'near zero' : rated;
     var word = $('level-word');
     word.textContent = level ? level.charAt(0).toUpperCase() + level.slice(1) : 'Not rated';
-    document.documentElement.style.setProperty('--level', level ? 'var(--lv-' + (LEVELS.indexOf(level) + 1) + ')' : 'var(--muted)');
+    document.documentElement.style.setProperty('--level', level ? 'var(--lv-' + LEVELS.indexOf(level) + ')' : 'var(--muted)');
     Array.prototype.forEach.call($('scale').children, function (li) {
       var on = li.getAttribute('data-level') === level;
       li.classList.toggle('on', on);
@@ -498,7 +508,10 @@
       meta.appendChild(warn);
     }
     var s1 = document.createElement('span');
-    s1.textContent = 'WastewaterSCAN rating for the sample collected ' + fmtDate(latest.date);
+    s1.textContent = nearZero
+      ? 'Trend under ' + NEAR_ZERO + ', about 1 in 20,000 people or fewer. WastewaterSCAN ' +
+        (rated ? 'rates the sample collected ' + fmtDate(latest.date) + ' “' + rated + '”' : 'hasn’t rated the sample collected ' + fmtDate(latest.date))
+      : 'WastewaterSCAN rating for the sample collected ' + fmtDate(latest.date);
     meta.appendChild(s1);
     if (data.fetchedAt) {
       var s2 = document.createElement('span');
@@ -543,7 +556,7 @@
     var prevalence = valid ? wwNum * K : null;
     var oneInN = prevalence && prevalence > 0 ? 1 / prevalence : null;
 
-    $('one-in-n').textContent = valid && oneInN ? '1 in ' + fmtN(oneInN) : '—';
+    $('one-in-n').textContent = valid && oneInN ? '1 in ' + fmtN(oneInN) : valid && prevalence === 0 ? 'None detected' : '—';
     $('pct').hidden = !valid;
     $('pct').textContent = fmtPct(prevalence) + ' of people';
     $('portland').textContent = prevalence == null ? '—' : '~' + fmtN(prevalence * POP.portland) + ' infections';
