@@ -34,6 +34,12 @@
     --warn-bg: #f7ead9;
     --spark: #2f7d6b;
     --spark-fill: rgba(47, 125, 107, 0.12);
+    --lv-1: #2f7d6b;
+    --lv-2: #6f8a2e;
+    --lv-3: #b07d16;
+    --lv-4: #c05a24;
+    --lv-5: #a8363a;
+    --level: var(--lv-1);
     --shadow: 0 1px 0 #fff inset, 0 18px 40px -28px rgba(40, 30, 20, .5);
     --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
     --mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -56,6 +62,11 @@
       --warn-bg: #3a2a1a;
       --spark: #74c4ab;
       --spark-fill: rgba(116, 196, 171, 0.14);
+      --lv-1: #74c4ab;
+      --lv-2: #b0cc72;
+      --lv-3: #e2b659;
+      --lv-4: #ee8b57;
+      --lv-5: #ef7474;
       --shadow: 0 18px 40px -28px rgba(0, 0, 0, .8);
     }
   }
@@ -76,10 +87,16 @@
     --warn-bg: #3a2a1a;
     --spark: #74c4ab;
     --spark-fill: rgba(116, 196, 171, 0.14);
+    --lv-1: #74c4ab;
+    --lv-2: #b0cc72;
+    --lv-3: #e2b659;
+    --lv-4: #ee8b57;
+    --lv-5: #ef7474;
     --shadow: 0 18px 40px -28px rgba(0, 0, 0, .8);
   }
 
   html { -webkit-text-size-adjust: 100%; }
+  [hidden] { display: none !important; }
   body {
     margin: 0;
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
@@ -90,22 +107,70 @@
   .wrap { padding: 32px 16px 40px; }
   .inner { max-width: 620px; margin: 0 auto; }
 
-  h1 {
-    font-weight: 900;
-    font-size: clamp(28px, 6vw, 44px);
-    line-height: 1.02;
-    margin: 0 0 6px;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
-  .sub { font-size: 15px; color: var(--muted); margin: 0 0 14px; max-width: 470px; line-height: 1.45; }
   a { color: var(--link); }
+
+  .top { margin-bottom: 22px; }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--hero);
+    margin: 0 0 18px;
+  }
+  .level-lead { font-size: 17px; color: var(--muted); margin: 0; }
+  .level-word {
+    font-weight: 900;
+    font-size: clamp(48px, 14vw, 78px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--level);
+    margin: 2px 0 16px;
+  }
+  .scale {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    max-width: 440px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--muted);
+  }
+  .scale li { display: grid; gap: 5px; }
+  .scale span { height: 7px; border-radius: 4px; background: var(--line); }
+  .scale li:nth-child(1) span { background: color-mix(in srgb, var(--lv-1) 30%, var(--line)); }
+  .scale li:nth-child(2) span { background: color-mix(in srgb, var(--lv-2) 30%, var(--line)); }
+  .scale li:nth-child(3) span { background: color-mix(in srgb, var(--lv-3) 30%, var(--line)); }
+  .scale li:nth-child(4) span { background: color-mix(in srgb, var(--lv-4) 30%, var(--line)); }
+  .scale li:nth-child(5) span { background: color-mix(in srgb, var(--lv-5) 30%, var(--line)); }
+  .scale li.on { color: var(--ink); font-weight: 600; }
+  .scale li.on span { background: var(--level); height: 9px; margin-top: -2px; }
+
+  .override {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--warn-ink);
+    background: var(--warn-bg);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+  }
+  .override .text-btn { color: var(--warn-ink); }
   .dash-link {
     font-family: var(--mono);
     font-size: 12.5px;
     text-underline-offset: 3px;
     display: inline-block;
-    margin-bottom: 24px;
+    margin-top: 14px;
   }
 
   .card {
@@ -135,7 +200,6 @@
     font-family: var(--mono);
     font-size: 12px;
     color: var(--muted);
-    margin-bottom: 12px;
   }
   .chip {
     display: inline-block;
@@ -196,7 +260,6 @@
   .spark-caption { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
 
   .big-result {
-    margin-top: 22px;
     padding: 24px 20px;
     border-radius: 14px;
     background: var(--well);
@@ -283,29 +346,29 @@
 
 </head>
 <body>
-<script id="ww-data" type="application/json">{"latest":{"date":"2026-09-21","trend":42.24,"sample":35.59,"level":"very low"},"history":[["2026-03-25",177.34],["2026-03-27",176.4],["2026-03-30",162.91],["2026-04-01",162.91],["2026-04-03",148.95],["2026-04-06",148.95],["2026-04-08",121.67],["2026-04-09",81.08],["2026-04-13",58.25],["2026-04-30",24.2],["2026-05-01",19.37],["2026-05-04",19.37],["2026-05-06",23.59],["2026-05-08",18.65],["2026-05-11",21.19],["2026-05-13",18.46],["2026-05-15",14.14],["2026-05-18",8.49],["2026-05-20",11.02],["2026-05-22",15.21],["2026-05-26",36.61],["2026-05-28",31.24],["2026-05-30",31.24],["2026-06-01",21.4],["2026-06-03",0.0],["2026-06-05",0.0],["2026-06-08",0.0],["2026-06-10",0.0],["2026-06-12",0.0],["2026-06-15",0.0],["2026-06-17",0.0],["2026-06-22",0.0],["2026-06-24",0.0],["2026-06-26",8.8],["2026-07-01",8.8],["2026-07-05",15.77],["2026-07-08",11.14],["2026-07-10",24.46],["2026-07-13",19.87],["2026-07-15",19.87],["2026-07-17",12.9],["2026-07-20",8.73],["2026-07-22",0.0],["2026-07-24",0.0],["2026-07-27",4.66],["2026-07-29",8.02],["2026-07-31",14.14],["2026-08-03",17.17],["2026-08-06",14.54],["2026-08-07",20.98],["2026-08-10",23.63],["2026-08-12",32.96],["2026-08-14",30.29],["2026-08-17",30.29],["2026-08-19",24.79],["2026-08-21",25.15],["2026-08-24",23.72],["2026-08-26",25.27],["2026-08-28",28.99],["2026-08-31",25.27],["2026-09-02",33.49],["2026-09-04",31.46],["2026-09-09",38.78],["2026-09-10",35.56],["2026-09-11",49.61],["2026-09-16",46.75],["2026-09-18",52.32],["2026-09-21",42.24]],"sourceUpdated":"2026-09-26T03:28:37.147587","fetchedAt":"2026-09-26T17:01:54+00:00"}</script>
+<script id="ww-data" type="application/json">{"latest":{"date":"2026-09-21","trend":42.24,"sample":35.59,"level":"very low"},"history":[["2026-03-25",177.34],["2026-03-27",176.4],["2026-03-30",162.91],["2026-04-01",162.91],["2026-04-03",148.95],["2026-04-06",148.95],["2026-04-08",121.67],["2026-04-09",81.08],["2026-04-13",58.25],["2026-04-30",24.2],["2026-05-01",19.37],["2026-05-04",19.37],["2026-05-06",23.59],["2026-05-08",18.65],["2026-05-11",21.19],["2026-05-13",18.46],["2026-05-15",14.14],["2026-05-18",8.49],["2026-05-20",11.02],["2026-05-22",15.21],["2026-05-26",36.61],["2026-05-28",31.24],["2026-05-30",31.24],["2026-06-01",21.4],["2026-06-03",0.0],["2026-06-05",0.0],["2026-06-08",0.0],["2026-06-10",0.0],["2026-06-12",0.0],["2026-06-15",0.0],["2026-06-17",0.0],["2026-06-22",0.0],["2026-06-24",0.0],["2026-06-26",8.8],["2026-07-01",8.8],["2026-07-05",15.77],["2026-07-08",11.14],["2026-07-10",24.46],["2026-07-13",19.87],["2026-07-15",19.87],["2026-07-17",12.9],["2026-07-20",8.73],["2026-07-22",0.0],["2026-07-24",0.0],["2026-07-27",4.66],["2026-07-29",8.02],["2026-07-31",14.14],["2026-08-03",17.17],["2026-08-06",14.54],["2026-08-07",20.98],["2026-08-10",23.63],["2026-08-12",32.96],["2026-08-14",30.29],["2026-08-17",30.29],["2026-08-19",24.79],["2026-08-21",25.15],["2026-08-24",23.72],["2026-08-26",25.27],["2026-08-28",28.99],["2026-08-31",25.27],["2026-09-02",33.49],["2026-09-04",31.46],["2026-09-09",38.78],["2026-09-10",35.56],["2026-09-11",49.61],["2026-09-16",46.75],["2026-09-18",52.32],["2026-09-21",42.24]],"sourceUpdated":"2026-09-27T09:22:03.792829","fetchedAt":"2026-09-27T16:37:24+00:00"}</script>
 
 <div class="wrap">
   <div class="inner">
-    <h1>How many people have COVID right now?</h1>
-    <p class="sub">
-      Estimates how many people are currently infectious from the WastewaterSCAN
-      reading for Portland, ME. The latest reading fills in automatically.
-    </p>
-    <a class="dash-link" href="https://data.wastewaterscan.org/tracker/?charts=CiUQACABSABSBjhiZWQ5MFoGTiBHZW5leKcBigEGNzIxZWQxwAEB&amp;selectedChartId=721ed1" target="_blank" rel="noreferrer">→ see the Portland chart on WastewaterSCAN</a>
+    <header class="top">
+      <h1 class="kicker">COVID in Portland, ME</h1>
+      <p class="level-lead">Current level</p>
+      <div class="level-word" id="level-word">—</div>
+      <ol class="scale" id="scale" aria-label="WastewaterSCAN level scale">
+        <li data-level="very low"><span></span>very low</li>
+        <li data-level="low"><span></span>low</li>
+        <li data-level="medium"><span></span>medium</li>
+        <li data-level="high"><span></span>high</li>
+        <li data-level="very high"><span></span>very high</li>
+      </ol>
+      <div class="reading-meta" id="reading-meta"></div>
+    </header>
 
     <div class="card">
-      <div class="section-title first">Wastewater level</div>
-      <div class="reading-meta" id="reading-meta"></div>
-
-      <label class="mini-label" for="ww">SARS-CoV-2 N gene / PMMoV × 1M, 5-sample trend</label>
-      <input id="ww" inputmode="decimal" autocomplete="off" placeholder="e.g. 845">
-      <div class="input-note">
-        <span id="input-status"></span>
-        <button type="button" class="text-btn" id="use-latest" hidden>Use latest reading</button>
+      <div class="override" id="override" hidden>
+        <span>These numbers use your wastewater number, <strong id="override-val"></strong>, not the latest reading.</span>
+        <button type="button" class="text-btn" id="use-latest-top">Use latest reading</button>
       </div>
-
-      <div class="spark" id="spark"></div>
 
       <div class="big-result">
         <div class="big-num" id="one-in-n">—</div>
@@ -340,6 +403,16 @@
         <div class="mini-val" id="expected">—</div>
         <div class="mini-sub">infectious people would be expected to attend</div>
       </div>
+
+      <div class="section-title">Wastewater level</div>
+      <label class="mini-label" for="ww">SARS-CoV-2 N gene / PMMoV × 1M, 5-sample trend</label>
+      <input id="ww" inputmode="decimal" autocomplete="off" placeholder="e.g. 845">
+      <div class="input-note">
+        <span id="input-status"></span>
+        <button type="button" class="text-btn" id="use-latest" hidden>Use latest reading</button>
+      </div>
+      <div class="spark" id="spark"></div>
+      <a class="dash-link" href="https://data.wastewaterscan.org/tracker/?charts=CiUQACABSABSBjhiZWQ5MFoGTiBHZW5leKcBigEGNzIxZWQxwAEB&amp;selectedChartId=721ed1" target="_blank" rel="noreferrer">→ see the Portland chart on WastewaterSCAN</a>
     </div>
 
     <p class="note">
@@ -373,6 +446,7 @@
   var K = (173 * 10 * 14) / 1390000 / 2400;
   var POP = { portland: 68000, cumberland: 303000 };
   var STALE_DAYS = 10;
+  var LEVELS = ['very low', 'low', 'medium', 'high', 'very high'];
 
   var data = {};
   try { data = JSON.parse(document.getElementById('ww-data').textContent); } catch (e) {}
@@ -399,22 +473,37 @@
   }
   function fmtN(n) { return n == null ? '—' : Math.round(n).toLocaleString(); }
 
-  function renderMeta() {
+  function renderLevel() {
+    var level = latest && LEVELS.indexOf(latest.level) >= 0 ? latest.level : null;
+    var word = $('level-word');
+    word.textContent = level ? level.charAt(0).toUpperCase() + level.slice(1) : 'Not rated';
+    document.documentElement.style.setProperty('--level', level ? 'var(--lv-' + (LEVELS.indexOf(level) + 1) + ')' : 'var(--muted)');
+    Array.prototype.forEach.call($('scale').children, function (li) {
+      var on = li.getAttribute('data-level') === level;
+      li.classList.toggle('on', on);
+      if (on) li.setAttribute('aria-current', 'true'); else li.removeAttribute('aria-current');
+    });
+
     var meta = $('reading-meta');
+    meta.textContent = '';
     if (!latest) {
-      meta.innerHTML = '<span class="chip warn">No automatic reading yet</span>';
+      meta.innerHTML = '<span class="chip warn">No reading available yet</span>';
       return;
     }
     var ageDays = Math.floor((Date.now() - new Date(latest.date + 'T12:00:00').getTime()) / 86400000);
-    var chip = ageDays > STALE_DAYS
-      ? '<span class="chip warn">Latest sample is ' + ageDays + ' days old</span>'
-      : '<span class="chip live">Latest reading</span>';
-    var level = latest.level ? ' · WastewaterSCAN rates it “' + latest.level + '”' : '';
-    meta.innerHTML = chip + '<span>Sample collected ' + fmtDate(latest.date) + level + '</span>';
+    if (ageDays > STALE_DAYS) {
+      var warn = document.createElement('span');
+      warn.className = 'chip warn';
+      warn.textContent = 'Latest sample is ' + ageDays + ' days old';
+      meta.appendChild(warn);
+    }
+    var s1 = document.createElement('span');
+    s1.textContent = 'WastewaterSCAN rating for the sample collected ' + fmtDate(latest.date);
+    meta.appendChild(s1);
     if (data.fetchedAt) {
-      var s = document.createElement('span');
-      s.textContent = 'Checked ' + fmtDate(data.fetchedAt, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-      meta.appendChild(s);
+      var s2 = document.createElement('span');
+      s2.textContent = 'Checked ' + fmtDate(data.fetchedAt, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      meta.appendChild(s2);
     }
   }
 
@@ -467,21 +556,26 @@
     $('at-least-one').textContent = atLeastOne == null ? '—' : (atLeastOne * 100).toFixed(atLeastOne < 0.1 ? 2 : 1) + '%';
     $('expected').textContent = expected == null ? '—' : '~' + expected.toFixed(2);
 
-    var edited = latest && ww.value.trim() !== latestStr;
+    var edited = !!latest && ww.value.trim() !== latestStr;
     $('use-latest').hidden = !edited;
+    $('override').hidden = !edited;
+    $('override-val').textContent = ww.value.trim() || 'blank';
     $('input-status').textContent = !latest
       ? 'Enter the trend value from the WastewaterSCAN chart.'
       : edited
         ? 'Using your own number.'
-        : 'Filled in from WastewaterSCAN. Type a different number to try another level.';
+        : 'Filled in from the latest reading. Type a different number to see results for another level.';
   }
+
+  function useLatest() { ww.value = latestStr; render(); }
 
   ww.value = latestStr || '150';
   ww.addEventListener('input', render);
   room.addEventListener('input', render);
-  $('use-latest').addEventListener('click', function () { ww.value = latestStr; render(); ww.focus(); });
+  $('use-latest').addEventListener('click', function () { useLatest(); ww.focus(); });
+  $('use-latest-top').addEventListener('click', useLatest);
 
-  renderMeta();
+  renderLevel();
   renderSpark();
   render();
 
